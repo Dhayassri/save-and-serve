@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Save and Serve</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#4CAF50" />
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0fff0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 80px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #388E3C;
+        }
+
+        .role-option {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+        }
+
+        .role-card {
+            background: #e8f5e9;
+            border: 2px solid #4CAF50;
+            border-radius: 12px;
+            padding: 20px;
+            width: 120px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .role-card:hover {
+            background: #c8e6c9;
+            transform: scale(1.05);
+        }
+
+        .role-card span {
+            font-size: 2rem;
+            display: block;
+        }
+
+        .footer-note {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Save and Serve</h1>
+        <p>Select your role to get started</p>
+
+        <div class="role-option">
+            <div class="role-card" onclick="selectRole('donor')">
+                <span>👨‍🍳</span>
+                Donor
+            </div>
+            <div class="role-card" onclick="selectRole('receiver')">
+                <span>🤝</span>
+                Receiver
+            </div>
+        </div>
+
+        <p class="footer-note">Helping food reach the right hands 🍽️</p>
+        <p class="soul-message">
+            “Every meal shared is a story of kindness. Let’s bridge hearts through food, one donation at a time.” 💚
+        </p>
+
+    </div>
+
+    <script>
+        function selectRole(role) {
+            if (role === 'donor') {
+                window.location.href = "donor.html";
+            } else {
+                window.location.href = "receiver-register.html"; // ⬅️ changed here
+            }
+
+        }
+
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(reg => console.log('✅ Service Worker Registered'))
+                .catch(err => console.log('❌ Service Worker Failed', err));
+        }
+    </script>
+</body>
+
+</html>

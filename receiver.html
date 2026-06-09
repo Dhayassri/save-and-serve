@@ -1,0 +1,94 @@
+<!-- receiver.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Available Food - Receiver</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div class="container">
+        <h1>Available Food Donations</h1>
+
+        <!-- Step 2: Welcome Message -->
+        <h2 id="receiverWelcome" style="margin-bottom: 20px;"></h2>
+
+        <!-- Donation Cards -->
+        <div class="donation-list" id="donationList">
+            <!-- Donations will load here dynamically -->
+        </div>
+    </div>
+
+    <p style="text-align:center; margin-top: 20px; font-size: 0.9rem; color: #555;">
+        (Note: Data is static for demo)
+    </p>
+
+    <p style="text-align:center; margin-top: 30px;">
+        <a href="index.html" class="home-btn">🏠 Back to Home</a>
+    </p>
+
+    <script>
+        // Step 1: Check if receiver is logged in
+        const receiver = JSON.parse(sessionStorage.getItem("receiver"));
+
+        if (!receiver) {
+            window.location.href = "receiver_register.html"; // Redirect if not registered
+        } else {
+            // Step 2: Show welcome message
+            document.getElementById("receiverWelcome").textContent = `Welcome, ${receiver.name}`;
+        }
+
+        // Load and display donations
+        const donationList = document.getElementById('donationList');
+        const donations = JSON.parse(localStorage.getItem('donations')) || [];
+
+        if (donations.length === 0) {
+            donationList.innerHTML = "<p>No food donations available right now.</p>";
+        } else {
+            donations.forEach((donation, index) => {
+                const card = document.createElement('div');
+                card.className = 'donation-card';
+                card.innerHTML = `
+    <h3>🍱 ${donation.food}</h3>
+    <p><strong>Quantity:</strong> ${donation.quantity}</p>
+    <p><strong>Available:</strong> ${donation.time}</p>
+    <p><strong>Pickup Address:</strong> ${donation.address}</p>
+    <p><strong>Location:</strong> ${donation.location}</p>
+    <p><strong>Contact:</strong> ${donation.phone}</p>
+    <button class="claim-btn" onclick="claimDonation(${index})">Claim</button>
+  `;
+                donationList.appendChild(card);
+            });
+
+        }
+
+    </script>
+    <script>
+        function claimDonation(index) {
+            const donations = JSON.parse(localStorage.getItem('donations')) || [];
+
+            // Get the donation being claimed
+            const claimed = donations[index];
+
+            // Optional: Save claimed donation under a separate key
+            const claimedList = JSON.parse(localStorage.getItem('claimedDonations')) || [];
+            claimedList.push(claimed);
+            localStorage.setItem('claimedDonations', JSON.stringify(claimedList));
+
+            // Remove it from the available list
+            donations.splice(index, 1);
+            localStorage.setItem('donations', JSON.stringify(donations));
+
+            alert('You have successfully claimed this donation!');
+
+            // Refresh the list on the page
+            location.reload(); // reloads the page to reflect updated list 
+        }
+    </script>
+
+</body>
+
+</html>

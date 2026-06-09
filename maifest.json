@@ -1,0 +1,15 @@
+{
+    "name": "Food Donation App",
+    "short_name": "FoodApp",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#4CAF50",
+    "icons": [
+        {
+            "src": "https://img.icons8.com/emoji/96/meal-emoji.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        }
+    ]
+}

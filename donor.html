@@ -1,0 +1,120 @@
+<!-- donor.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Donor Form - Food Donation App</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <form id="donorForm">
+        <input type="text" id="donorName" placeholder="Full Name" required />
+        <input type="tel" id="donorPhone" placeholder="Phone Number" required />
+        <input type="text" id="foodType" placeholder="Food Type (e.g., Rice, Bread)" required />
+        <input type="number" id="quantity" placeholder="Quantity (e.g., 10 packs)" required />
+        <input type="text" id="availableTime" placeholder="Available Time (e.g., 6PM - 9PM)" required />
+        <input type="text" id="pickupAddress" placeholder="Pickup Address" required />
+        <input type="text" id="location" placeholder="Location (City or Area)" required />
+
+        <button type="submit">Submit Donation</button>
+    </form>
+    <h2 style="text-align:center;">Your Donations</h2>
+    <div id="donationList" class="donation-list"></div>
+
+    <p id="thankYouMsg" style="display:none; color: green; text-align:center; margin-top:20px;">
+        ✅ Thank you for your donation!
+    </p>
+
+
+
+
+    <p style="text-align:center; margin-top: 20px;">
+        <a href="receiver.html" class="view-receiver-btn">🔍 View All Donations</a>
+    </p>
+    <script>
+        const form = document.getElementById('donorForm');
+        const thankYou = document.getElementById('thankYouMsg');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const donorData = {
+                name: document.getElementById('donorName').value,
+                phone: document.getElementById('donorPhone').value,
+                food: document.getElementById('foodType').value,
+                quantity: document.getElementById('quantity').value,
+                time: document.getElementById('availableTime').value,
+                address: document.getElementById('pickupAddress').value,
+                location: document.getElementById('location').value,
+                claimed: false  // 👈 Add this new field
+            };
+
+            let donations = JSON.parse(localStorage.getItem('donations')) || [];
+            donations.push(donorData);
+            localStorage.setItem('donations', JSON.stringify(donations));
+
+            thankYou.style.display = "block";
+            form.reset();
+
+            setTimeout(() => {
+                renderDonations(); // 👈 Call to re-render the list
+            }, 500);
+        });
+
+        // ⬇️ Paste this right after the above code
+        function renderDonations() {
+            const donationList = document.getElementById('donationList');
+            donationList.innerHTML = ""; // Clear old list
+            const donations = JSON.parse(localStorage.getItem('donations')) || [];
+
+            donations.forEach((donation, index) => {
+                const card = document.createElement('div');
+                card.className = 'donation-card';
+                card.innerHTML = `
+      <h3>🍱 ${donation.food}</h3>
+      <p><strong>Quantity:</strong> ${donation.quantity}</p>
+      <p><strong>Available:</strong> ${donation.time}</p>
+      <p><strong>Pickup Address:</strong> ${donation.address}</p>
+      <p><strong>Status:</strong> ${donation.claimed ? "✅ Claimed" : "🟢 Available"}</p>
+
+      <button ${donation.claimed ? 'disabled' : ''} onclick="markAsClaimed(${index})">
+        ${donation.claimed ? 'Already Claimed' : 'Mark as Claimed'}
+      </button>
+
+      <button onclick="deleteDonation(${index})" style="margin-left:10px; background-color:#e74c3c; color:white;">
+        ❌ Delete
+      </button>
+    `;
+                donationList.appendChild(card);
+            });
+        }
+
+        function markAsClaimed(index) {
+            let donations = JSON.parse(localStorage.getItem('donations')) || [];
+            donations[index].claimed = true;
+            localStorage.setItem('donations', JSON.stringify(donations));
+            renderDonations();
+        }
+        function deleteDonation(index) {
+            let donations = JSON.parse(localStorage.getItem('donations')) || [];
+            donations.splice(index, 1); // Remove the item at given index
+            localStorage.setItem('donations', JSON.stringify(donations));
+            renderDonations(); // Refresh the list
+        }
+
+
+        // Load on page start
+        renderDonations();
+    </script>
+
+    <p style="text-align:center; margin-top: 30px;">
+        <a href="index.html" class="home-btn">🏠 Back to Home</a>
+    </p>
+
+
+</body>
+
+</html>
