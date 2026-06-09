@@ -4,7 +4,7 @@ Save & Serve is a Progressive Web Application (PWA) designed to connect food don
 
 ## Live Demo
 
- ![Save and Serve ](https://save-and-serve.netlify.app/)
+https://save-and-serve.netlify.app/
 
 ## Project Overview
 
